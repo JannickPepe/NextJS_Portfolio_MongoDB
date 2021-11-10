@@ -1,10 +1,10 @@
-//import portfolios from data folder to have the object values
-const { portfolios, users, forumCategories } = require('./data');
+//import portfolios from data -> model folder to have the object values
+const { portfolios, users, forumCategories, topics } = require('./data');
 
 const Portfolio = require('../database/models/portfolio');
 const User = require('../database/models/user');
-
 const ForumCategory = require('../database/models/forumCategory');
+const Topic = require('../database/models/topic'); 
 
 //Create the collection portofolio in mongoDB.
 class FakeDb {
@@ -13,6 +13,7 @@ class FakeDb {
       await User.deleteMany({});
         await Portfolio.deleteMany({});
         await ForumCategory.deleteMany({});
+        await Topic.deleteMany({});
   
     }
   
@@ -20,6 +21,7 @@ class FakeDb {
       await User.create(users); 
         await Portfolio.create(portfolios);
         await ForumCategory.create(forumCategories);
+        await Topic.create(topics);
       }
     
       async populate() {
