@@ -4,6 +4,11 @@ const user1Id = mongoose.Types.ObjectId();
 const user2Id = mongoose.Types.ObjectId();
 
 
+const forum1Id = mongoose.Types.ObjectId();
+const forum2Id = mongoose.Types.ObjectId();
+const forum3Id = mongoose.Types.ObjectId();
+
+
 //Make the varible data and have the object portfolios to contain field data
 const data = {
 
@@ -61,6 +66,26 @@ const data = {
         startDate: '01/01/2010',
         endDate: '01/01/2011',
         user: user1Id
+      }
+    ],
+    forumCategories: [
+      {
+        _id: forum1Id,
+        title: 'General Discussion',
+        subTitle: 'Open any topic you want',
+        slug: 'general-discussion'
+      },
+      {
+        _id: forum2Id,
+        title: 'Job Requests',
+        subTitle: 'Post here job opportunities',
+        slug: 'job-requests'
+      },
+      {
+        _id: forum3Id,
+        title: 'Developer Jokes',
+        subTitle: 'Just funny developing stuff',
+        slug: 'developer-jokes'
       }
     ]
   }
