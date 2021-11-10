@@ -31,7 +31,6 @@ exports.portfolioMutations = {
 
 }
 
-
 exports.userQueries = {
   user: (root, args, ctx) => {
     return ctx.models.User.getAuthUser(ctx);
@@ -57,5 +56,8 @@ exports.userMutations = {
 exports.forumQueries = {
   forumCategories: (root, args, ctx) => {
     return ctx.models.ForumCategory.getAll();
+  },
+  topicsByCategory: (root, { category }, ctx) => {
+    return ctx.models.Topic.getAllByCategory(category);
   }
 }

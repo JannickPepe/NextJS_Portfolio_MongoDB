@@ -50,4 +50,18 @@ exports.forumTypes = `
     subTitle: String
     slug: String
   }
+
+  type Author {
+    avatar: String
+    username: String
+  }
+  type Topic {
+    _id: ID
+    slug: String
+    title: String
+    content: String
+    forumCategory: ForumCategory
+    user: Author
+    createdAt: String
+  }
 `

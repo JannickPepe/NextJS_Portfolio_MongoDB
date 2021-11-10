@@ -17,6 +17,7 @@ const { buildAuthContext } = require('./context');
 const Portfolio = require('./models/Portfolio');
 const User = require('./models/User');
 const ForumCategory = require('./models/ForumCategory');
+const Topic = require('./models/Topic');
 
 exports.createApolloServer = () => {
   // Construct a schema, using GRAPHQL schema language
@@ -33,6 +34,8 @@ exports.createApolloServer = () => {
     user: User
 
     forumCategories: [ForumCategory]
+
+    topicsByCategory(category: String): [Topic]
   }
   type Mutation {
     createPortfolio(input: PortfolioInput): Portfolio
@@ -65,7 +68,8 @@ exports.createApolloServer = () => {
       models: {
         Portfolio: new Portfolio(mongoose.model('Portfolio'), req.user),
         User: new User(mongoose.model('User')),
-        ForumCategory: new ForumCategory(mongoose.model('ForumCategory'))
+        ForumCategory: new ForumCategory(mongoose.model('ForumCategory')),
+        Topic: new Topic(mongoose.model('Topic'))
       }
     })
   })
