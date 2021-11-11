@@ -41,6 +41,7 @@
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.3.2",
     "react-toastify": "^6.0.8",
-    "slugify": "^1.6.2"
+    "slugify": "^1.6.2",
+    "unique-slug": "^2.0.2"
   }
 }
