@@ -37,7 +37,7 @@ exports.userQueries = {
   }
 }
 
-//make the different callbacks which have been created in models - User.js
+//make the different callbacks functions which have been created in models - User.js
 exports.userMutations = {
 
   signUp: async (root, { input }, ctx) => {
@@ -52,7 +52,7 @@ exports.userMutations = {
   }
 }
 
-
+// Create functions and create mongose call to category + the methods will be in Topic.js
 exports.forumQueries = {
   forumCategories: (root, args, ctx) => {
     return ctx.models.ForumCategory.getAll();

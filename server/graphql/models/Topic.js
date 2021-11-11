@@ -4,6 +4,7 @@ class Topic {
         this.Model = model;
     }
 
+    // get all topic by forumcategory
     getAllByCategory(forumCategory) {
         return this.Model
         .find({forumCategory})
