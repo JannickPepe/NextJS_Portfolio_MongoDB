@@ -5,11 +5,13 @@ import { useGetTopicsByCategory, useGetUser } from '@/apollo/actions';
 import { useRouter } from 'next/router';
 import withApollo from '@/hoc/withApollo';
 import { getDataFromTree } from '@apollo/react-ssr';
+import Replier from '@/components/shared/Replier';
+
 
 const useInitialData = () => {
-
   const router = useRouter();
   const { slug } = router.query;
+  
   const { data: dataT } = useGetTopicsByCategory({variables: {category: slug}});
   const { data: dataU } = useGetUser();
   const topicsByCategory = (dataT && dataT.topicsByCategory) || [];
@@ -22,21 +24,26 @@ const Topics = () => {
   const [ isReplierOpen, setReplierOpen] = useState(false);
   const { topicsByCategory, user } = useInitialData();
 
+  const createTopic = (topicData, done) => {
+    alert(JSON.stringify(topicData));
+    done();
+  }
+
+
   return (
     <BaseLayout>
-  
       <section className="section-title">
         <div className="px-2">
           <div className="pt-5 pb-4">
-          <h1>Select a Topic</h1>
-          <button
+            <h1>Select a Topic</h1>
+            <button
               onClick={() => setReplierOpen(true)}
               disabled={!user}
               className="btn btn-primary">
               Create Topic
             </button>
             {!user && <i className="ml-2">Log in to create topic</i>}
-        </div>
+          </div>
         </div>
       </section>
       <section className="fj-topic-list">
@@ -49,7 +56,7 @@ const Topics = () => {
             </tr>
           </thead>
           <tbody>
-          { topicsByCategory.map(topic =>
+            { topicsByCategory.map(topic =>
               <tr key={topic._id}>
                 <th>{topic.title}</th>
                 <td className="category">{topic.forumCategory.title}</td>
@@ -61,9 +68,18 @@ const Topics = () => {
         </table>
       </section>
 
-      <Replier isOpen={isReplierOpen}/>
+      <Replier
+        isOpen={isReplierOpen}
+        onSubmit={createTopic}
+        onClose={() => setReplierOpen(false)}
+        closeBtn={() =>
+          <a
+            onClick={() => setReplierOpen(false)}
+            className="btn py-2 ttu gray-10">Cancel
+          </a>
+        }
+      />
     </BaseLayout>
   )
 }
-
 export default withApollo(Topics, {getDataFromTree});
