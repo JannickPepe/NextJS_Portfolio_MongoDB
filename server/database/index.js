@@ -7,6 +7,7 @@ require('./models/portfolio');
 require('./models/user');
 require('./models/forumCategory');
 require('./models/topic');
+require('./models/post');
 
 //function connect - connection with mongoose into the config on DB URI string and connect if values are true
 exports.connect = () => {
