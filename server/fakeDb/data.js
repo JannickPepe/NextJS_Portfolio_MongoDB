@@ -30,7 +30,7 @@ const data = {
   users: [
     {
       _id: user1Id,
-      avatar: "https://mir-s3-cdn-cf.behance.net/project_modules/disp/10f13510774061.560eadfde5b61.png",
+      avatar: "https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png",
       email: "jannick@live.dk",
       name: "Jannick Pedersen",
       username: "jannick",
@@ -40,7 +40,7 @@ const data = {
     },
     {
       _id: user2Id,
-      avatar: "https://f0.pngfuel.com/png/312/283/man-face-clip-art-png-clip-art-thumbnail.png",
+      avatar: "https://cdn.icon-icons.com/icons2/1736/PNG/512/4043260-avatar-male-man-portrait_113269.png",      
       email: "jannickp@live.dk",
       name: "Test user",
       username: "jannickp",
