@@ -14,10 +14,10 @@ const { portfolioTypes, userTypes, forumTypes } = require('./types');
 const { buildAuthContext } = require('./context');
 
 // GraphqlModels
-const Portfolio = require('./models/Portfolio');
-const User = require('./models/User');
-const ForumCategory = require('./models/ForumCategory');
-const Topic = require('./models/Topic');
+const Portfolio = require('./models/portfolio');
+const User = require('./models/user');
+const ForumCategory = require('./models/forumCategory');
+const Topic = require('./models/topic');
 
 exports.createApolloServer = () => {
   // Construct a schema, using GRAPHQL schema language

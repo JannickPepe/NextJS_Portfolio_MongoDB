@@ -1,4 +1,4 @@
-const Portfolio = require('../../database/models/portfolio');
+const Portfolio = require('../models/portfolio');
 
 
 exports.portfolioQueries = {
