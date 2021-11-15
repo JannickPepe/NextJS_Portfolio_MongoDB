@@ -65,11 +65,10 @@ export const useGetUser = () => useQuery(GET_USER)
 
 
 // Forum actions Start -----------------------
-export const useGetForumCategories = () => useQuery(FORUM_CATEGORIES)
 
+export const useGetForumCategories = () => useQuery(FORUM_CATEGORIES)
 export const useGetTopicsByCategory = (options) => useQuery(TOPICS_BY_CATEGORY, options)
 export const useGetTopicBySlug = options => useQuery(TOPIC_BY_SLUG, options)
-
 export const useCreateTopic = () => useMutation(CREATE_TOPIC, {
   update(cache, {data: {createTopic}}) {
     try {
@@ -87,6 +86,17 @@ export const useCreateTopic = () => useMutation(CREATE_TOPIC, {
 })
 
 export const useGetPostsByTopic = options => useQuery(POSTS_BY_TOPIC, options)
-export const useCreatePost = () => useMutation(CREATE_POST)
+
+export const useCreatePost = () => useMutation(CREATE_POST, {
+  update(cache) {
+    try {
+      Object.keys(cache.data.data).forEach(key => {
+        key.match(/^Post/) && cache.data.delete(key)
+      })
+    } catch(e){}
+  }
+})
+
+
 
 // Forum actions End -----------------------

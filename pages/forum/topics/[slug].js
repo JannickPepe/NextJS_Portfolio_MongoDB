@@ -60,6 +60,8 @@ const Posts = ({posts, topic, user, fetchMore, ...pagination}) => {
   const [ isReplierOpen, setReplierOpen ] = useState(false);
   const [ replyTo, setReplyTo ] = useState(null);
 
+  const { pageSize, count, pageNum } = pagination;
+
   const handleCreatePost = async (reply, resetReplier) => {
     if (replyTo) {
       reply.parent = replyTo._id;
@@ -67,10 +69,14 @@ const Posts = ({posts, topic, user, fetchMore, ...pagination}) => {
 
     reply.topic = topic._id;
     await createPost({variables: reply});
-    await fetchMore({
+    let lastPage = Math.ceil(count / pageSize);
+    if (count === 0) { lastPage = 1;}
+
+    lastPage === pageNum && await fetchMore({
+      variables: { pageSize, pageNum: lastPage },
       updateQuery: (previousResults, { fetchMoreResult }) => {
         return Object.assign({}, previousResults, {
-          postsByTopic: [...fetchMoreResult.postsByTopic]
+          postsByTopic: {...fetchMoreResult.postsByTopic}
         })
       }
     })
