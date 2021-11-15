@@ -14,9 +14,7 @@ import { toast } from 'react-toastify';
 import AppPagination from '@/components/shared/Pagination';
 
 
-const useInitialData = (pagination) => {
-  const router = useRouter();
-  const { slug } = router.query;
+const useInitialData = (slug, pagination) => {
   const { data: dataT } = useGetTopicBySlug({variables: { slug }});
   const { data: dataP, fetchMore } = useGetPostsByTopic({variables: { slug, ...pagination }});
   const { data: dataU } = useGetUser();
@@ -28,8 +26,10 @@ const useInitialData = (pagination) => {
 }
 
 const PostPage = () => {
-  const [ pagination, setPagination ] = useState({pageNum: 1, pageSize: 10});
-  const { topic, posts, ...rest } = useInitialData(pagination);
+  const router = useRouter();
+  const { slug, pageNum = 1, pageSize = 5 } = router.query;
+  const [ pagination, setPagination ] = useState({pageNum: parseInt(pageNum, 10), pageSize: parseInt(pageSize, 10)});
+  const { topic, posts, ...rest } = useInitialData(slug, pagination);
 
   return (
     <BaseLayout>
@@ -45,12 +45,16 @@ const PostPage = () => {
         topic={topic}
         {...rest}
         {...pagination}
+        onPageChange={(pageNum, pageSize) => {
+          router.push('/forum/topics/[slug]', `/forum/topics/${slug}?pageNum=${pageNum}&pageSize=${pageSize}`, {shallow: true})
+          setPagination({pageNum, pageSize})
+        }}
       />
     </BaseLayout>
   )
 }
 
-const Posts = ({posts, topic, user, fetchMore, count, pageSize}) => {
+const Posts = ({posts, topic, user, fetchMore, ...pagination}) => {
   const pageEnd = useRef();
   const [ createPost, { error }] = useCreatePost();
   const [ isReplierOpen, setReplierOpen ] = useState(false);
@@ -87,7 +91,7 @@ const Posts = ({posts, topic, user, fetchMore, count, pageSize}) => {
   return (
     <section className="mb-5">
       <div className="fj-post-list">
-        { topic._id &&
+      { topic._id && pagination.pageNum === 1 &&
           <PostItem
             post={topic}
             className="topic-post-lead"/>
@@ -125,10 +129,7 @@ const Posts = ({posts, topic, user, fetchMore, count, pageSize}) => {
             }
 
             <div className="pagination-container ml-auto">
-              <AppPagination
-                  pageSize={pageSize}
-                  count={count}
-              />
+              <AppPagination {...pagination} />
             </div>
             
           </div>
