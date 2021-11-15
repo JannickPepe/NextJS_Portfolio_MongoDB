@@ -10,24 +10,26 @@ import withApollo from '@/hoc/withApollo';
 import { getDataFromTree } from '@apollo/react-ssr';
 import  PostItem from '@/components/forum/PostItem';
 import Replier from '@/components/shared/Replier';
-
 import { toast } from 'react-toastify';
+import AppPagination from '@/components/shared/Pagination';
 
 
-const useInitialData = () => {
+const useInitialData = (pagination) => {
   const router = useRouter();
   const { slug } = router.query;
   const { data: dataT } = useGetTopicBySlug({variables: { slug }});
-  const { data: dataP } = useGetPostsByTopic({variables: { slug }});
+  const { data: dataP, fetchMore } = useGetPostsByTopic({variables: { slug, ...pagination }});
   const { data: dataU } = useGetUser();
+
   const topic = (dataT && dataT.topicBySlug) || {};
-  const posts = (dataP && dataP.postsByTopic) || [];
+  const postData = (dataP && dataP.postsByTopic) || { posts: [], count: 0 };
   const user = (dataU && dataU.user) || null;
-  return { topic, posts, user };
+  return { topic, ...postData, user, fetchMore };
 }
 
 const PostPage = () => {
-  const { topic, posts, user } = useInitialData();
+  const [ pagination, setPagination ] = useState({pageNum: 1, pageSize: 10});
+  const { topic, posts, ...rest } = useInitialData(pagination);
 
   return (
     <BaseLayout>
@@ -41,13 +43,14 @@ const PostPage = () => {
       <Posts
         posts={posts}
         topic={topic}
-        user={user}
+        {...rest}
+        {...pagination}
       />
     </BaseLayout>
   )
 }
 
-const Posts = ({posts, topic, user}) => {
+const Posts = ({posts, topic, user, fetchMore, count, pageSize}) => {
   const pageEnd = useRef();
   const [ createPost, { error }] = useCreatePost();
   const [ isReplierOpen, setReplierOpen ] = useState(false);
@@ -60,7 +63,18 @@ const Posts = ({posts, topic, user}) => {
 
     reply.topic = topic._id;
     await createPost({variables: reply});
+    await fetchMore({
+      updateQuery: (previousResults, { fetchMoreResult }) => {
+        return Object.assign({}, previousResults, {
+          postsByTopic: [...fetchMoreResult.postsByTopic]
+        })
+      }
+    })
     resetReplier();
+    cleanup();
+  }
+
+  const cleanup = () => {
     setReplierOpen(false);
     toast.success('Post has been created!', {autoClose: 2000});
     scrollToBottom();
@@ -109,6 +123,14 @@ const Posts = ({posts, topic, user}) => {
                 </button>
               </div>
             }
+
+            <div className="pagination-container ml-auto">
+              <AppPagination
+                  pageSize={pageSize}
+                  count={count}
+              />
+            </div>
+            
           </div>
         </div>
         </div>
