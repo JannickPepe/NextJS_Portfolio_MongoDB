@@ -1,12 +1,14 @@
 const slugify = require('slugify')
 const uniqueSlug = require('unique-slug');
+const BaseModel = require('./BaseModel');
 
-class Topic {
+class Topic extends BaseModel {
 
-    constructor(model, user) {
-        this.Model = model;
-        this.user = user;
+    async getRandoms(limit) {
+        const query = await super.getRandoms(limit);
+    return query().populate('user');
     }
+    
 
     getBySlug(slug) {
         return this.Model.findOne({slug}).populate('user').populate('forumCategory');
