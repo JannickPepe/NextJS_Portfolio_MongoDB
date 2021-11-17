@@ -1,6 +1,10 @@
-const config = require('../config/dev');
+
+
+const config = require('../config');
 const session = require('express-session');
 const passport = require('passport');
+
+
 exports.init = (server, db) => {
   require('./passport').init(passport);
   const sess = {
