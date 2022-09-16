@@ -11,13 +11,7 @@ require('./models/post');
 
 //function connect - connection with mongoose into the config on DB URI string and connect if values are true
 exports.connect = () => {
-  mongoose.connect(config.DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
-
-  }, () => {
+  mongoose.connect(config.DB_URI, () => {
     console.log('Connected to DB')
   })
 }
